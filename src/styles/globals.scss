@@ -43,3 +43,13 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+::-moz-selection { /* Code for Firefox */
+  background: var(--pink);
+  color: var(--white);
+}
+
+::selection {
+  background: var(--pink);
+  color: var(--white);
+}

@@ -1,0 +1,44 @@
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+
+  & + div {
+    margin-top: 4rem;
+  }
+
+  a {
+    font-size: 1.75rem;
+    font-weight: 700;
+
+    &:hover {
+      color: var(--pink);
+    }
+  }
+
+  p {
+    font-size: 1.125rem;
+    font-weight: 400;
+    margin-top: 0.5rem;
+    color: var(--subtitle);
+  }
+}
+
+.infoContainer {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  font-size: .875rem;
+
+  div {
+    display: flex;
+    align-items: center;
+
+    svg {
+      margin-right: 0.625rem;
+    }
+
+    & + div {
+      margin-left: 1.625rem;
+    }
+  }
+}

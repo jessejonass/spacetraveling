@@ -22,7 +22,7 @@ interface PostPagination {
 }
 
 interface HomeProps {
-  postsPagination: PostPagination;
+  posts: PostPagination;
 }
 
 interface GetStaticPropsResult {
@@ -107,7 +107,7 @@ describe('Home', () => {
   });
 
   it('should be able to return prismic posts documents using getStaticProps', async () => {
-    const postsPaginationReturn = mockedQueryReturn;
+    const postsReturn = mockedQueryReturn;
 
     const getStaticPropsContext: GetStaticPropsContext<ParsedUrlQuery> = {};
 
@@ -115,21 +115,21 @@ describe('Home', () => {
       getStaticPropsContext
     )) as GetStaticPropsResult;
 
-    expect(response.props.postsPagination.next_page).toEqual(
-      postsPaginationReturn.next_page
+    expect(response.props.posts.next_page).toEqual(
+      postsReturn.next_page
     );
-    expect(response.props.postsPagination.results).toEqual(
+    expect(response.props.posts.results).toEqual(
       expect.arrayContaining([
-        expect.objectContaining(postsPaginationReturn.results[0]),
-        expect.objectContaining(postsPaginationReturn.results[1]),
+        expect.objectContaining(postsReturn.results[0]),
+        expect.objectContaining(postsReturn.results[1]),
       ])
     );
   });
 
   it('should be able to render posts documents info', () => {
-    const postsPagination = mockedQueryReturn;
+    const posts = mockedQueryReturn;
 
-    render(<App postsPagination={postsPagination} />);
+    render(<App posts={posts} />);
 
     screen.getByText('Como utilizar Hooks');
     screen.getByText('Pensando em sincronização em vez de ciclos de vida');
@@ -145,9 +145,9 @@ describe('Home', () => {
   });
 
   it('should be able to navigate to post page after a click', () => {
-    const postsPagination = mockedQueryReturn;
+    const posts = mockedQueryReturn;
 
-    render(<App postsPagination={postsPagination} />, {
+    render(<App posts={posts} />, {
       wrapper: RouterWrapper,
     });
 
@@ -172,8 +172,8 @@ describe('Home', () => {
   });
 
   it('should be able to load more posts if available', async () => {
-    const postsPagination = { ...mockedQueryReturn };
-    postsPagination.results = [
+    const posts = { ...mockedQueryReturn };
+    posts.results = [
       {
         uid: 'como-utilizar-hooks',
         first_publication_date: '2021-03-15T19:25:28+0000',
@@ -185,7 +185,7 @@ describe('Home', () => {
       },
     ];
 
-    render(<App postsPagination={postsPagination} />);
+    render(<App posts={posts} />);
 
     screen.getByText('Como utilizar Hooks');
     const loadMorePostsButton = screen.getByText('Carregar mais posts');
@@ -203,10 +203,10 @@ describe('Home', () => {
   });
 
   it('should not be able to load more posts if not available', async () => {
-    const postsPagination = mockedQueryReturn;
-    postsPagination.next_page = null;
+    const posts = mockedQueryReturn;
+    posts.next_page = null;
 
-    render(<App postsPagination={postsPagination} />);
+    render(<App posts={posts} />);
 
     screen.getByText('Como utilizar Hooks');
     screen.getByText('Criando um app CRA do zero');

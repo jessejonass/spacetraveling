@@ -1,4 +1,4 @@
-type Post = {
+export type Post = {
   uid?: string;
   first_publication_date: string | null;
   data: {
@@ -8,11 +8,11 @@ type Post = {
   };
 };
 
-type PostPagination = {
+export type PostPagination = {
   next_page: string;
   results: Post[];
 };
 
 export type HomeProps = {
-  posts: PostPagination;
+  postsPagination: PostPagination;
 };

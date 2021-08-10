@@ -1,4 +1,8 @@
 .homeContainer {
-  height: calc(100vh - 8rem);
   width: 100%;
+}
+
+.loadMoreButton {
+  margin-top: 4rem;
+  color: var(--pink);
 }

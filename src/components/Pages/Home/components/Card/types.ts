@@ -3,4 +3,5 @@ export type CardProps = {
   subtitle?: string;
   date: string;
   author: string;
+  slug: string;
 };

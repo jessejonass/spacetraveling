@@ -1,15 +1,17 @@
 import { FC } from 'react';
 import Link from 'next/link';
 import { FaCalendar, FaUser } from 'react-icons/fa';
+import { format } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
 
 import styles from './card.module.scss';
 
 import { CardProps } from './types';
 
-const Card: FC<CardProps> = ({ title, date, author, subtitle }) => {
+const Card: FC<CardProps> = ({ title, date, author, subtitle, slug }) => {
   return (
     <div className={styles.cardContainer}>
-      <Link href="/">
+      <Link href={`/post/${slug}`}>
         <a>{title}</a>
       </Link>
 
@@ -19,10 +21,8 @@ const Card: FC<CardProps> = ({ title, date, author, subtitle }) => {
         <div>
           <FaCalendar size={20} color="#bbb" />
           <time>
-            {new Date(date).toLocaleDateString('pt-BR', {
-              day: '2-digit',
-              month: 'long',
-              year: 'numeric',
+            {format(new Date(date), 'dd MMM yyyy', {
+              locale: ptBR,
             })}
           </time>
         </div>

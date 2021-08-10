@@ -22,7 +22,7 @@ interface PostPagination {
 }
 
 interface HomeProps {
-  posts: PostPagination;
+  postsPagination: PostPagination;
 }
 
 interface GetStaticPropsResult {
@@ -115,10 +115,10 @@ describe('Home', () => {
       getStaticPropsContext
     )) as GetStaticPropsResult;
 
-    expect(response.props.posts.next_page).toEqual(
+    expect(response.props.postsPagination.next_page).toEqual(
       postsReturn.next_page
     );
-    expect(response.props.posts.results).toEqual(
+    expect(response.props.postsPagination.results).toEqual(
       expect.arrayContaining([
         expect.objectContaining(postsReturn.results[0]),
         expect.objectContaining(postsReturn.results[1]),
@@ -129,7 +129,7 @@ describe('Home', () => {
   it('should be able to render posts documents info', () => {
     const posts = mockedQueryReturn;
 
-    render(<App posts={posts} />);
+    render(<App postsPagination={posts} />);
 
     screen.getByText('Como utilizar Hooks');
     screen.getByText('Pensando em sincronização em vez de ciclos de vida');
@@ -147,7 +147,7 @@ describe('Home', () => {
   it('should be able to navigate to post page after a click', () => {
     const posts = mockedQueryReturn;
 
-    render(<App posts={posts} />, {
+    render(<App postsPagination={posts} />, {
       wrapper: RouterWrapper,
     });
 
@@ -185,7 +185,7 @@ describe('Home', () => {
       },
     ];
 
-    render(<App posts={posts} />);
+    render(<App postsPagination={posts} />);
 
     screen.getByText('Como utilizar Hooks');
     const loadMorePostsButton = screen.getByText('Carregar mais posts');
@@ -206,7 +206,7 @@ describe('Home', () => {
     const posts = mockedQueryReturn;
     posts.next_page = null;
 
-    render(<App posts={posts} />);
+    render(<App postsPagination={posts} />);
 
     screen.getByText('Como utilizar Hooks');
     screen.getByText('Criando um app CRA do zero');

@@ -1,45 +1,46 @@
+import { FC } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
-
+import Prismic from '@prismicio/client';
 import { getPrismicClient } from '../../services/prismic';
+import PostPage from '../../components/Pages/Post';
+import { PostProps } from '../../components/Pages/Post';
 
-import commonStyles from '../../styles/common.module.scss';
-import styles from './post.module.scss';
+const Post: FC<PostProps> = ({ post }) => {
+  return <PostPage post={post} />;
+};
 
-interface Post {
-  first_publication_date: string | null;
-  data: {
-    title: string;
-    banner: {
-      url: string;
-    };
-    author: string;
-    content: {
-      heading: string;
-      body: {
-        text: string;
-      }[];
-    }[];
+export default Post;
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const prismic = getPrismicClient();
+
+  const posts = await prismic.query(
+    [Prismic.predicates.at('document.type', 'post')],
+    {
+      pageSize: 2,
+    }
+  );
+
+  const paths = posts.results.map(post => ({
+    params: { slug: post.uid },
+  }));
+
+  return {
+    paths,
+    fallback: true,
   };
-}
+};
 
-interface PostProps {
-  post: Post;
-}
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const { slug } = params;
 
-// export default function Post() {
-//   // TODO
-// }
+  const prismic = getPrismicClient();
+  const post = await prismic.getByUID('post', String(slug), {});
 
-// export const getStaticPaths = async () => {
-//   const prismic = getPrismicClient();
-//   const posts = await prismic.query(TODO);
-
-//   // TODO
-// };
-
-// export const getStaticProps = async context => {
-//   const prismic = getPrismicClient();
-//   const response = await prismic.getByUID(TODO);
-
-//   // TODO
-// };
+  return {
+    props: {
+      post,
+    },
+    revalidate: 60 * 60 * 12, // 12 horas
+  };
+};

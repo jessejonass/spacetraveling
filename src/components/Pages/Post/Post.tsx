@@ -4,11 +4,18 @@ import { FaCalendar, FaUser, FaClock } from 'react-icons/fa';
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import { RichText } from 'prismic-dom';
+import { useRouter } from 'next/router';
 import { PostProps } from './types';
 import styles from './post.module.scss';
 import commonStyles from '../../../styles/common.module.scss';
 
 const Post: FC<PostProps> = ({ post }) => {
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return <p>Carregando...</p>;
+  }
+
   return (
     <>
       <Head>

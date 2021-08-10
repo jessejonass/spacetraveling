@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import Head from 'next/head';
 import { FaCalendar, FaUser, FaClock } from 'react-icons/fa';
 import { format } from 'date-fns';
@@ -11,6 +11,24 @@ import commonStyles from '../../../styles/common.module.scss';
 
 const Post: FC<PostProps> = ({ post }) => {
   const router = useRouter();
+
+  const readTime = useMemo(() => {
+    if (router.isFallback) {
+      return 0;
+    }
+
+    let documentBody = '';
+    const wpm = 200;
+
+    post.data.content.forEach(postContent => {
+      documentBody += postContent.heading;
+      documentBody += RichText.asText(postContent.body);
+    });
+
+    const time = Math.ceil(documentBody.split(/\s/g).length / wpm);
+
+    return time;
+  }, [post, router.isFallback]);
 
   if (router.isFallback) {
     return <p>Carregando...</p>;
@@ -52,7 +70,7 @@ const Post: FC<PostProps> = ({ post }) => {
 
               <div>
                 <FaClock size={20} color="#bbb" />
-                <span>4 min</span>
+                <span>{readTime} min</span>
               </div>
             </div>
 
